@@ -40,6 +40,7 @@ def testKeyboard():
         pygame.display.flip()
 
     while True:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -133,7 +134,9 @@ def postHardware(hardware_info):
         'size': hardware_info['size'],
         'tech_notes': hardware_info['tech_notes'],
         'batteryCondition' :hardware_info['batteryCondition'],
-        'batteryCycles' : hardware_info['batteryCycles']
+        'batteryCycles' : hardware_info['batteryCycles'],
+        'wiped' : hardware_info['wiped'],
+        'tech_initals' : hardware_info['initals']
     }
     print(str(spec))
     data = {
@@ -222,7 +225,8 @@ def main():
     batteryCondition, batteryCycles = getBatteryState()
     hardware_info['batteryCondition'] = batteryCondition
     hardware_info['batteryCycles'] = batteryCycles
-   # hardware_info['keyboard'] = testKeyboard()
+    hardware_info['tech_initals'] = get_text_input(screen, 'Enter Passcode: ', font, input_box_asset, color_active, color_passive, 4)
+    hardware_info['keyboard'] = testKeyboard()
 
     # User input
     hardware_info['assetnb'] = get_text_input(screen, 'Enter Asset Number: ', font, input_box_asset, color_active, color_passive, 10)

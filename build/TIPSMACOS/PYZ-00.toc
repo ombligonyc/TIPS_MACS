@@ -1,4 +1,4 @@
-('/Users/nathan/Desktop/TIPS/build/macbook/PYZ-00.pyz',
+('/Users/nathan/Desktop/TIPS/build/TIPSMACOS/PYZ-00.pyz',
  [('__future__',
    '/usr/local/Cellar/python@3.11/3.11.6/Frameworks/Python.framework/Versions/3.11/lib/python3.11/__future__.py',
    'PYMODULE'),
@@ -317,7 +317,6 @@
   ('json.scanner',
    '/usr/local/Cellar/python@3.11/3.11.6/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/scanner.py',
    'PYMODULE'),
-  ('keyboard', '/Users/nathan/Desktop/TIPS/keyboard.py', 'PYMODULE'),
   ('logging',
    '/usr/local/Cellar/python@3.11/3.11.6/Frameworks/Python.framework/Versions/3.11/lib/python3.11/logging/__init__.py',
    'PYMODULE'),
