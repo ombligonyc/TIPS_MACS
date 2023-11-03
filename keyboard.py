@@ -109,11 +109,16 @@ def parse_hardware_info(sph, disk):
     return info
 
 def getHWInfo():
-    batteryCondition = subprocess.Popen("system_profiler SPPowerDataType | grep 'Condition' | awk '{print $2}'", shell=True, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
-    batteryCycles = subprocess.Popen("system_profiler SPPowerDataType | grep 'Cycle Count' | awk '{print $3}'", shell=True, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
     SPH = subprocess.Popen("system_profiler SPHardwareDataType", shell=True, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
     DISK = subprocess.Popen("diskutil info disk0 | grep 'Disk Size'", shell=True, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
-    parse_hardware_info(SPH, DISK)
+    hardware_info = parse_hardware_info(SPH, DISK)
+    return hardware_info
+
+
+def getBatteryState():
+    batteryCondition = subprocess.Popen("system_profiler SPPowerDataType | grep 'Condition' | awk '{print $2}'", shell=True, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
+    batteryCycles = subprocess.Popen("system_profiler SPPowerDataType | grep 'Cycle Count' | awk '{print $3}'", shell=True, stdout=subprocess.PIPE).stdout.read().decode('utf-8')
+    return batteryCondition, batteryCycles
 
 def postHardware(hardware_info):
     url = 'http://10.1.101.4:1111/main/post_macbook/'
@@ -149,56 +154,66 @@ def postHardware(hardware_info):
 
 
 
+def main():
 
-os.system('clear')
+    hardware_info = getHWInfo()
 
-testKeyboard()
+    batteryCondition, batteryCycles = getBatteryState()
 
-hardware_info['assetnb'] = input('Enter Asset Number: ')
-while len(hardware_info['assetnb']) < 10:
-    hardware_info['assetnb'] = input('Asset Number short. Enter Asset Number: ')
-os.system('clear')
+    hardware_info['batteryCondition'] = batteryCondition
+    hardware_info['batteryCycles'] = batteryCycles
+
+    os.system('clear')
+
+    testKeyboard()
+
+    hardware_info['assetnb'] = input('Enter Asset Number: ')
+    while len(hardware_info['assetnb']) < 10:
+        hardware_info['assetnb'] = input('Asset Number short. Enter Asset Number: ')
+    os.system('clear')
 
 
-hardware_info['refnb'] = input('Enter PO: ')
-os.system('clear')
+    hardware_info['refnb'] = input('Enter PO: ')
+    os.system('clear')
 
-print('P: PASS')
-print('F: FAIL')
-print('S: FOR PARTS/SCRAP')
-
-hardware_info['quality'] = input('Enter quality: ')
-
-if hardware_info['quality'] == 'P' or hardware_info['quality'] == 'p':
-    hardware_info['quality'] = 'PASS'
-
-if hardware_info['quality'] == 'F' or hardware_info['quality'] == 'f':
-    hardware_info['quality'] = 'FAIL'
-
-if hardware_info['quality'] == 's' or hardware_info['quality'] == 'S':
-    hardware_info['quality'] = 'FOR PARTS / SCRAP)'
-
-while hardware_info['quality'] not in ['P','p','F','f','S','s']:
     print('P: PASS')
     print('F: FAIL')
     print('S: FOR PARTS/SCRAP')
 
     hardware_info['quality'] = input('Enter quality: ')
-os.system('clear')
 
-hardware_info['color'] = input('Enter color: ')
-os.system('clear')
+    if hardware_info['quality'] == 'P' or hardware_info['quality'] == 'p':
+        hardware_info['quality'] = 'PASS'
 
-hardware_info['size'] = input('Enter Size: ')
-while hardware_info['size'] not in ['12','13','15']:
-    print('12,13, or 15')
+    if hardware_info['quality'] == 'F' or hardware_info['quality'] == 'f':
+        hardware_info['quality'] = 'FAIL'
+
+    if hardware_info['quality'] == 's' or hardware_info['quality'] == 'S':
+        hardware_info['quality'] = 'FOR PARTS / SCRAP)'
+
+    while hardware_info['quality'] not in ['P','p','F','f','S','s']:
+        print('P: PASS')
+        print('F: FAIL')
+        print('S: FOR PARTS/SCRAP')
+
+        hardware_info['quality'] = input('Enter quality: ')
+    os.system('clear')
+
+    hardware_info['color'] = input('Enter color: ')
+    os.system('clear')
+
     hardware_info['size'] = input('Enter Size: ')
+    while hardware_info['size'] not in ['12','13','15']:
+        print('12,13, or 15')
+        hardware_info['size'] = input('Enter Size: ')
 
-os.system('clear')
+    os.system('clear')
 
-hardware_info['tech_notes'] = input('Additional Notes: ')
+    hardware_info['tech_notes'] = input('Additional Notes: ')
 
 
-postHardware(hardware_info)
+    postHardware(hardware_info)
+
+main()
 
 
